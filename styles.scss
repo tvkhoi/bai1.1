@@ -346,10 +346,59 @@ a {
     }
 
     &__banner {
-        img {
+        width: 100%;
+        height: 350px !important;
+        overflow: hidden;
+        position: relative;
+
+        &__btns {
             width: 100%;
-            height: auto;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .--left {
+                margin-left: 20px;
+            }
+
+            .--right {
+                margin-right: 20px;
+            }
+        }
+        img {
+            width: 100% !important;
+            height: 100% !important;
             object-fit: cover;
+            display: none;
+            background-position: center;
+        }
+        &__dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+
+            span {
+                width: 12px;
+                height: 12px;
+                background-color: rgba(255, 255, 255, 0.7);
+                border-radius: 50%;
+                cursor: pointer;
+
+                &.active {
+                    background-color: white;
+                }
+            }
         }
     }
 
