@@ -1,143 +1,137 @@
 $(document).ready(function () {
-    let images = $('.main__banner img');
+
+    const images = $('.main__banner img');
     let currentIndex = 0;
-    let dotsContainer = $('.main__banner__dots');
+    const dots = $('.main__banner__dots');
 
-    for (let i = 0; i < images.length; i++) {
-        let dot = $('<span class="dot"></span>');
+    images.each(function (i) {
+        dots.append(`<span class="dot ${i === 0 ? 'active' : ''}"></span>`);
+    });
 
-        if (i === currentIndex) {
-            dot.addClass('active');
-        }
+    const allDots = dots.find('.dot');
 
-        dotsContainer.append(dot);
+    images.hide().eq(0).show();
+
+    const widthImg = images.width();
+    const heightImg = images.height();
+
+    let isAnimating = false;
+
+    function changeImage(nextIndex, direction = 1) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const oldImg = images.eq(currentIndex);
+        const newImg = images.eq(nextIndex);
+
+        oldImg
+            .css({
+                width: widthImg * 0.1,
+                height: heightImg * 0.1
+            })
+            .addClass("hide-anim");
+
+        setTimeout(() => {
+            oldImg.hide().removeClass("hide-anim")
+                .css({
+                    width: widthImg,
+                    height: heightImg
+                });
+
+            newImg
+                .show()
+                .addClass("show-anim");
+
+            setTimeout(() => {
+                newImg.removeClass("show-anim");
+                isAnimating = false;
+            }, 600);
+
+        }, 600);
+
+        currentIndex = nextIndex;
+
+        allDots.removeClass("active").eq(currentIndex).addClass("active");
     }
 
-    images.eq(currentIndex).show();
-    images.not(':eq(' + currentIndex + ')').hide();
-
-    let width__img = images.width();
-    let height__img = images.height();
-
     $('.main__banner__btn.--right').click(function () {
-        $('.main__banner__btn.--right').css({
-            'pointer-events': 'none'
-        });
-        images.eq(currentIndex).animate({
-            rotate: '+=360deg',
-            opacity: '0.5',
-            width: width__img * 0.1,
-            height: height__img * 0.1
-        }, 1000, function () {
-            $(this).hide();
-            currentIndex = (currentIndex + 1) % images.length;
-            images.eq(currentIndex).css({
-                rotate: '0deg',
-                opacity: '1',
-                width: width__img,
-                height: height__img
-            });
-            images.eq(currentIndex).show();
-            $('.main__banner__btn.--right').css({
-                'pointer-events': 'auto'
-            });
-        });
-        dotsContainer.find('.dot').removeClass('active').eq(currentIndex).addClass('active');
+        const next = (currentIndex + 1) % images.length;
+        changeImage(next, 1);
     });
 
     $('.main__banner__btn.--left').click(function () {
-        $('.main__banner__btn.--left').css({
-            'pointer-events': 'none'
-        });
-        images.eq(currentIndex).animate({
-            rotate: '-=360deg',
-            opacity: '0.5',
-            width: width__img * 0.1,
-            height: height__img * 0.1
-        }, 1000, function () {
-            $(this).hide();
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            images.eq(currentIndex).css({
-                rotate: '0deg',
-                opacity: '1',
-                width: width__img,
-                height: height__img
-            });
-            images.eq(currentIndex).show();
-            $('.main__banner__btn.--left').css({
-                'pointer-events': 'auto'
-            });
-        });
-        dotsContainer.find('.dot').removeClass('active').eq(currentIndex).addClass('active');
+        const prev = (currentIndex - 1 + images.length) % images.length;
+        changeImage(prev, -1);
     });
 
-    dotsContainer.find('.dot').click(function () {
-        $('.main__banner__dots').css({
-            'display': 'none'
-        });
-        let index = $(this).index();
-        images.eq(currentIndex).animate({
-            rotate: '+=360deg',
-            opacity: '0.5',
-            width: width__img * 0.1,
-            height: height__img * 0.1
-        }, 1000, function () {
-            $(this).hide();
-            currentIndex = index;
-            images.eq(currentIndex).css({
-                rotate: '0deg',
-                opacity: '1',
-                width: width__img,
-                height: height__img
-            });
-            images.eq(currentIndex).show();
-            $('.main__banner__dots').css({
-                'display': 'flex'
-            });
-
-            dotsContainer.find('.dot').removeClass('active').eq(currentIndex).addClass('active');
-        });
-
-        $('.main__banner').on('mouseenter', function () {
-            $('.main__banner__btn').show();
-        }).on('mouseleave', function () {
-            $('.main__banner__btn').hide();
-        });
-
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        images.on('touchstart', function (e) {
-            touchStartX = e.originalEvent.touches[0].clientX;
-        });
-        images.on('touchmove', function (e) {
-            touchEndX = e.originalEvent.touches[0].clientX;
-        });
-        images.on('touchend', function (e) {
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            if (touchEndX < touchStartX - 50) {
-                $('.main__banner__btn.--right').click();
-            }
-            if (touchEndX > touchStartX + 50) {
-                $('.main__banner__btn.--left').click();
-            }
+    allDots.click(function () {
+        const index = $(this).index();
+        if (index !== currentIndex) {
+            changeImage(index, 1);
         }
+    });
 
-        images.mousedown(function (e) {
-            e.preventDefault();
-            touchStartX = e.clientX;
-        });
-        images.mousemove(function (e) {
-            e.preventDefault();
-            touchEndX = e.clientX;
-        });
-        images.mouseup(function (e) {
-            e.preventDefault();
-            handleSwipe();
-        });
+    $('.main__banner').hover(
+        function () {
+            $('.main__banner__btn').show();
+        },
+        function () {
+            $('.main__banner__btn').hide();
+        }
+    );
 
+    let startX = 0;
+    let endX = 0;
+
+    function handleSwipe() {
+        if (endX < startX - 50) $('.--right').click();
+        if (endX > startX + 50) $('.--left').click();
+    }
+
+    images.on('touchstart mousedown', function (e) {
+        startX = e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX;
+    });
+
+    images.on('touchmove mousemove', function (e) {
+        endX = e.originalEvent.touches ? e.originalEvent.touches[0].clientX : e.clientX;
+    });
+
+    images.on('touchend mouseup', function () {
+        handleSwipe();
+    });
+
+    $('.bar').on('click', function () {
+        $('body').css('overflow', 'hidden');
+        $('.nav__bar').css('display', 'flex');
+        $('.overlay').toggleClass('active');
+        $('.close-bar').css('display', 'block');
+        $('.bar').css('display', 'none');
+
+        $('.overlay').click(function () {
+            $('body').css('overflow', 'auto');
+            $('.nav__bar').css('display', 'none');
+            $('.overlay').removeClass('active');
+            $('.close-bar').css('display', 'none');
+            $('.bar').css('display', 'block');
+        });
+    });
+
+    let isUserInfoVisible = false;
+    $('.icon_user').on('click', function () {
+        if (isUserInfoVisible) {
+            $('.header__content__user__info').css('display', 'none');
+            isUserInfoVisible = false;
+            return;
+        }
+        // Click ra ngoài info để đóng
+        $(document).on('click', function (e) {
+            // nếu click không phải trên info hoặc icon
+            if (!$(e.target).closest('.header__content__user, .header__content__user__info').length) {
+                $('.header__content__user__info').hide();
+                isUserInfoVisible = false;
+            }
+        });
+        $('.header__content__user__info').css('display', 'flex');
+        isUserInfoVisible = true;
     });
 });

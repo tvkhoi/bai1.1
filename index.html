@@ -14,6 +14,16 @@
 </head>
 
 <body>
+    <div class="overlay"></div>
+    <div class="nav__bar">
+        <a href="#" class="uppercase">paint</a>
+        <a href="#" class="uppercase">paint supplies</a>
+        <a href="#" class="uppercase">vintage wares</a>
+        <a href="#" class="uppercase">suite goods</a>
+        <a href="#" class="uppercase">how-to</a>
+        <a href="#" class="uppercase">events & workshops</a>
+        <a href="#" class="uppercase">suite inspiration</a>
+    </div>
     <div class="container">
         <div class="fixed">
             <div class="container">
@@ -21,19 +31,10 @@
                     <div class="header__wraper">
                         <div class="header__content">
                             <div class="header__content__nav">
-                                <input type="checkbox" id="bar" hidden>
-                                <label for="bar"><i class="fa-solid fa-bars" for="bar"></i></label>
-                                <div>
-                                    <a href="#" class="uppercase">paint</a>
-                                    <a href="#" class="uppercase">paint supplies</a>
-                                    <a href="#" class="uppercase">vintage wares</a>
-                                    <a href="#" class="uppercase">suite goods</a>
-                                    <a href="#" class="uppercase">how-to</a>
-                                    <a href="#" class="uppercase">events & workshops</a>
-                                    <a href="#" class="uppercase">suite inspiration</a>
-                                </div>
+                                <i class="fa-solid fa-bars bar"></i>
+                                <i class="fa-solid fa-x close-bar"></i>
                             </div>
-                            <input type="text" placeholder="SEARCH" />
+                            <input type="text" placeholder="SEARCH" name="search" />
                             <a href="#" class="header__content__search fn"><img
                                     src="./images/1419001718_698956-icon-111-search-128.png" alt="search"></a>
                             <a href="#" class="uppercase fn">Login</a>
@@ -41,7 +42,7 @@
                             <a href="#" class="uppercase fn">My cart</a>
                             <div class="header__content__user">
                                 <a href="#"><i class="fa-solid fa-user icon_user"></i></a>
-                                <div>
+                                <div class="header__content__user__info">
                                     <a href="#" class="uppercase">Login</a>
                                     <a href="#" class="uppercase">Register</a>
                                     <a href="#" class="uppercase">My cart</a>
@@ -97,8 +98,10 @@
             <hr>
             <div class="main__banner">
                 <div class="main__banner__btns">
-                    <button class="main__banner__btn --left"><i class="fa-solid fa-chevron-left" style="cursor: pointer;"></i></button>
-                    <button class="main__banner__btn --right"><i class="fa-solid fa-chevron-right" style="cursor: pointer;"></i></button>
+                    <button class="main__banner__btn --left"><i class="fa-solid fa-chevron-left"
+                            style="cursor: pointer;"></i></button>
+                    <button class="main__banner__btn --right"><i class="fa-solid fa-chevron-right"
+                            style="cursor: pointer;"></i></button>
                 </div>
                 <img class="img" src="./images/workshops.png" alt="workshops">
                 <img class="img" src="./images/banner_2.png" alt="banner_2">
@@ -217,7 +220,8 @@
                             <h3 class="uppercase">Join our newsletter</h3>
                         </div>
                         <div class="footer__top__item__des">
-                            <input class="footer__top__item__des__icon" type="text" placeholder="EMAIL" disabled />
+                            <input class="footer__top__item__des__icon" type="text" placeholder="EMAIL" name="mail"
+                                disabled />
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                                 incididunt, ut labore et dolore magna aliqua.</p>
                         </div>
